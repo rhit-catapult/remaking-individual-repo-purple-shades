@@ -98,12 +98,15 @@ class Cloud:
 
     def rain(self):
         """ Adds a Raindrop to the array of raindrops so that it looks like the Cloud is raining. """
-        # TODO 28: Append a new Raindrop to this Cloud's list of raindrops,
+        # DONE 28: Append a new Raindrop to this Cloud's list of raindrops,
         #     where the new Raindrop starts at:
         #       - x is a random integer between this Cloud's x and this Cloud's x + 300.
         #       - y is this Cloud's y + 100.
-        pass
-
+        for k in range(3):
+            drop_x = random.randint(self.x + 2, self.x + self.image.get_width())
+            drop_y = self.y + self.image.get_height() - 5
+            new_raindrop = Raindrop(self.screen, drop_x, drop_y)
+            self.raindrops.append(new_raindrop)
 
 def main():
     """ Main game loop that creates the sprite objects, controls interactions, and draw the screen. """
@@ -129,7 +132,7 @@ def main():
     # DONE 3: Enter the game loop, with a clock tick of 60 (or so) at each iteration.
         # DONE 4:   Make the pygame.QUIT event stop the game.
 
-        # TODO 27: Inside the game loop (AFTER the events loop above), get the list of keys that are currently pressed.
+        #TODO 27: Inside the game loop (AFTER the events loop above), get the list of keys that are currently pressed.
         #     Arrange so that the Cloud moves:
         #       5 pixels (or 10 pixels) to the right if the Right Arrow key (pygame.K_RIGHT) is pressed.
         #       5 pixels (or 10 pixels) to the left  if the Left  Arrow key (pygame.K_LEFT)  is pressed.
@@ -137,7 +140,15 @@ def main():
         #       5 pixels (or 10 pixels) down         if the Down  Arrow key (pygame.K_DOWN)  is pressed.
         # DISCUSS: If you want something to happen once per key press, put it in the events loop above
         #          If you want something to continually happen while holding the key, put it after the events loop.
-
+        pressed_keys = pygame.key.get_pressed()
+        if pressed_keys[pygame.K_UP]:
+            cloud.y -=10
+        if pressed_keys[pygame.K_DOWN]:
+            cloud.y +=10
+        if pressed_keys[pygame.K_LEFT]:
+            cloud.x -=10
+        if pressed_keys[pygame.K_RIGHT]:
+            cloud.x +=10
         # DONE 5: Inside the game loop, draw the screen (fill with white)
         screen.fill((255,255,255))
         # --- begin area of test_drop code that will be removed later
@@ -159,14 +170,14 @@ def main():
         alyssa.last_hit_time = time.time()
             # test_drop.x = 350
             # test_drop.y = 10
-        # TODO 22: Remove the code that reset the y of the test_drop when off_screen()
+        # DONE 22: Remove the code that reset the y of the test_drop when off_screen()
         #          Instead reset the test_drop y to 10 when mike is hit, additionally set the x to 750
         #          Then add similar code to alyssa that sets her last_hit_time and moves the test_drop to 10 320
         # --- end area of test_drop code that will be removed later
 
-        # TODO 26: Draw the Cloud.
+        # DONE 26: Draw the Cloud.
         cloud.draw()
-        # TODO 29: Remove the temporary testdrop code from this function and refactor it as follows:
+        # DONE 29: Remove the temporary testdrop code from this function and refactor it as follows:
         
         # TODO: Make the Cloud "rain", then:
         # TODO    For each Raindrop in the Cloud's list of raindrops:
@@ -174,7 +185,10 @@ def main():
             #       - draw the Raindrop.
             # TODO  30: if the Hero (Mike or Alyssa) is hit by a Raindrop, set the Hero's last_time_hit to the current time.
             # Optional  - if the Raindrop is off the screen or hitting a Hero, remove it from the Cloud's list of raindrops.
-
+        cloud.rain()
+        for raindrop in cloud.raindrops:
+            raindrop.move()
+            raindrop.draw()
         # DONE 18: Draw the Heroes (Mike and Alyssa)
         mike.draw()
         alyssa.draw()
